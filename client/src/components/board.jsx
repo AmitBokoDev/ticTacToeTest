@@ -14,12 +14,23 @@ import * as utils from '../utils/functions'
 export class Board extends React.Component {
     constructor(props) {
         super(props)
+        let isGame = window.location.href.indexOf("/game/") > -1 ? true : false;
+
+        let gameId = null;
+
+        if (isGame) {
+            gameId = window.location.href.split('/');
+            gameId = gameId[gameId.length - 1]
+        }
 
         // Initialize component state
         this.state = {
+            isGame: isGame,
+            gameId: gameId,
             boxes: Array(9).fill(null),
-            history: [],
-            xIsNext: true
+            myTurn: true,
+            mySymbol: 'X', //either X or O, default X
+            gameAlive: false,
         }
     }
 
@@ -28,11 +39,12 @@ export class Board extends React.Component {
 
     // Handle click on boxes on the board.
     handleBoxClick(index) {
+        if (!this.state.gameAlive || !this.state.myTurn)
+            return;
+
         // get current state of boxes
         const boxes = this.state.boxes.slice()
 
-        // Get current state of history
-        let history = this.state.history
 
         // Stop the game if board contains winning combination
         if (utils.findWinner(boxes) || boxes[index]) {
@@ -45,26 +57,28 @@ export class Board extends React.Component {
         }
 
         // Mark the box either as 'x' or 'o'
-        boxes[index] = this.state.xIsNext ? 'x' : 'o'
-
-        // Add move to game history
-        history.push(this.state.xIsNext ? 'x' : 'o')
+        boxes[index] = this.state.mySymbol;
 
         // Update component state with new data
         this.setState({
             boxes: boxes,
-            history: history,
-            xIsNext: !this.state.xIsNext
+            myTurn: !this.state.myTurn
         })
     }
 
     // Handle board restart - set component state to initial state
     handleBoardRestart = () => {
+        let gameId = (new Date()).getMilliseconds();
+        gameId = btoa(gameId);
+        gameId = btoa(gameId);
+        console.log(gameId);
+
         this.setState({
+            gameId: gameId,
             boxes: Array(9).fill(null),
-            history: [],
             xIsNext: true
         })
+        window.location.replace(window.location.protocol + "//" + window.location.host + "/game/" + gameId);
     }
 
     render() {
@@ -98,7 +112,7 @@ export class Board extends React.Component {
             <>
                 {/* The game board */}
                 <div className="board-wrapper">
-                    <div className="board">
+                    {this.state.isGame && <div className="board">
                         <h2 className="board-heading">{status}</h2>
 
                         <div className="board-row">
@@ -124,9 +138,9 @@ export class Board extends React.Component {
 
                             <Box value={this.state.boxes[8]} onClick={() => this.handleBoxClick(8)} />
                         </div>
-                    </div>
+                    </div>}
                     {/* Button to start new game */}
-                    {winner && <div className="board-footer">
+                    {((winner) || (!winner && isFilled) || (!this.state.isGame)) && <div className="board-footer">
                         <button className="btn" onClick={this.handleBoardRestart}>Start new game</button>
                     </div>}
                 </div>
