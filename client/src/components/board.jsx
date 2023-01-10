@@ -30,15 +30,24 @@ export class Board extends React.Component {
             boxes: Array(9).fill(null),
             myTurn: true,
             mySymbol: 'X', //either X or O, default X
-            gameAlive: false,
+            gameAlive: true,
         }
+    }
+
+    async componentDidMount() {
+        // call api or anything
+        if (this.state.isGame) {
+            await utils.updatePlayers(this.state.gameId);
+            await utils.fetchGameData(this.state.gameId);
+        }
+        console.log("Component has been rendered");
     }
 
     // Create instance of Storage object
     // storage = new Storage()
 
     // Handle click on boxes on the board.
-    handleBoxClick(index) {
+    async handleBoxClick(index) {
         if (!this.state.gameAlive || !this.state.myTurn)
             return;
 
@@ -64,7 +73,10 @@ export class Board extends React.Component {
             boxes: boxes,
             myTurn: !this.state.myTurn
         })
+        await utils.fetchGameData(this.state.gameId);
     }
+
+
 
     // Handle board restart - set component state to initial state
     handleBoardRestart = async () => {
@@ -74,8 +86,8 @@ export class Board extends React.Component {
             gameId = btoa(gameId);
             console.log(gameId);
             let insert = await utils.newGame(gameId)
-            // if ()
-            // window.location.replace(window.location.protocol + "//" + window.location.host + "/game/" + gameId);
+            if (insert.gameId !== undefined)
+                window.location.replace(window.location.protocol + "//" + window.location.host + "/game/" + gameId);
         }
 
 

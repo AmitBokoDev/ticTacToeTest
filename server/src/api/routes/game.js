@@ -13,9 +13,14 @@ game.post("/newGame", async function(req, res) {
     let result = await db.insertNewGame(req.body.gameId);
     return res.status(200).send(JSON.stringify({result}));
 })
-game.get("/fetchGameData", async function(req, res) {
+game.post("/updatePlayers", async function(req, res) {
     console.log(req.body);
-    let result = await getGameData(req.body.gameId);
+    let result = await db.updatePlayers(req.body.gameId);
+    return res.status(200).send(JSON.stringify({result}));
+})
+game.get("/getGameData", async function(req, res) {
+    console.log(req.query);
+    let result = await db.getGameData(req.query.gameId);
     return res.status(200).send(JSON.stringify(result));
 })
 

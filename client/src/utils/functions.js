@@ -52,10 +52,32 @@ export function areAllBoxesClicked(boxes) {
 
 export async function newGame(gameId){
     let res =  await axios.post(serverUrl+"/newGame",{gameId:gameId});
+    res = res.data.result;
+    console.log(res);
+    return res;
+}
+export async function updatePlayers(gameId){
+    let res =  await axios.post(serverUrl+"/updatePlayers",{gameId:gameId});
+    res = res.data.result;
     console.log(res);
     return res;
 }
 
-export async function fetchGameData(gameId){
-    return await axios.get(serverUrl,gameId);
+export async function fetchGameData(gameId) {
+
+    setInterval(async function () {
+        let data = await axios.get(serverUrl+"/getGameData?gameId="+gameId);
+        if (data.isAlive) {
+            this.setState({
+                isAlive: true,
+            }
+            )
+        }
+        if (data.whosTurn == this.state.mySymbol)
+            this.setState.myTurn = true;
+
+        if (this.setState.myTurn)
+            return;
+
+    }, 5000)
 }
