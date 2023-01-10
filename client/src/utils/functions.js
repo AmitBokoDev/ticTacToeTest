@@ -1,3 +1,6 @@
+import axios from "axios";
+const serverUrl = process.env.REACT_APP_SERVER_URL
+
 export function findWinner(boxes) {
     // Array with winning combinations
     const rows = [
@@ -45,4 +48,8 @@ export function areAllBoxesClicked(boxes) {
     } else {
         return false
     }
+}
+
+export async function fetchGameData(gameId){
+    return await axios.get(serverUrl,gameId);
 }

@@ -68,17 +68,19 @@ export class Board extends React.Component {
 
     // Handle board restart - set component state to initial state
     handleBoardRestart = () => {
-        let gameId = (new Date()).getMilliseconds();
-        gameId = btoa(gameId);
-        gameId = btoa(gameId);
-        console.log(gameId);
+        if (!this.state.isGame) {
+            let gameId = (new Date()).getMilliseconds();
+            gameId = btoa(gameId);
+            gameId = btoa(gameId);
+            console.log(gameId);
+            window.location.replace(window.location.protocol + "//" + window.location.host + "/game/" + gameId);
+        }
+
 
         this.setState({
-            gameId: gameId,
             boxes: Array(9).fill(null),
-            xIsNext: true
+            myTurn: true
         })
-        window.location.replace(window.location.protocol + "//" + window.location.host + "/game/" + gameId);
     }
 
     render() {
@@ -105,7 +107,7 @@ export class Board extends React.Component {
             // this.storage.update(['Game drawn'])
         } else {
             // If there is no winner and game is not drawn, ask the next player to make a move
-            status = `It is ${(this.state.xIsNext ? 'x' : 'o')}'s turn.`
+            status = `It is ${(this.state.myTurn ? "your" : "opponent's")} turn.`
         }
 
         return (
@@ -113,6 +115,8 @@ export class Board extends React.Component {
                 {/* The game board */}
                 <div className="board-wrapper">
                     {this.state.isGame && <div className="board">
+                        {!this.state.gameAlive && <h1 className="board-heading">{"Waithing For Opponent"}</h1>}
+                        <h2 className="board-heading">{"You are " + this.state.mySymbol}</h2>
                         <h2 className="board-heading">{status}</h2>
 
                         <div className="board-row">
