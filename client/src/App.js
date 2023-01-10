@@ -1,5 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
+import board from './components/board';
+import button from './components/button';
 
 function App() {
   return (
