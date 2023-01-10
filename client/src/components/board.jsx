@@ -67,13 +67,15 @@ export class Board extends React.Component {
     }
 
     // Handle board restart - set component state to initial state
-    handleBoardRestart = () => {
+    handleBoardRestart = async () => {
         if (!this.state.isGame) {
             let gameId = (new Date()).getMilliseconds();
             gameId = btoa(gameId);
             gameId = btoa(gameId);
             console.log(gameId);
-            window.location.replace(window.location.protocol + "//" + window.location.host + "/game/" + gameId);
+            await utils.newGame(gameId)
+            // if ()
+            // window.location.replace(window.location.protocol + "//" + window.location.host + "/game/" + gameId);
         }
 
 
