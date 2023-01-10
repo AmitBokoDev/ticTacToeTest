@@ -50,6 +50,7 @@ export function areAllBoxesClicked(boxes) {
     }
 }
 
+
 export async function newGame(gameId){
     let res =  await axios.post(serverUrl+"/newGame",{gameId:gameId});
     res = res.data.result;
@@ -63,6 +64,7 @@ export async function updatePlayers(gameId){
     return res;
 }
 
+//periodicly check if other player connected or did a move
 export async function fetchGameData(gameId) {
 
     setInterval(async function () {

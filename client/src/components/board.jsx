@@ -1,8 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-// // Import Storage object
-// import { Storage } from './../storage/storage'
 
 // Import Box component
 import { Box } from './box'
@@ -34,6 +32,7 @@ export class Board extends React.Component {
         }
     }
 
+    //stuff to call when game is loaded
     async componentDidMount() {
         // call api or anything
         if (this.state.isGame) {
@@ -43,8 +42,6 @@ export class Board extends React.Component {
         console.log("Component has been rendered");
     }
 
-    // Create instance of Storage object
-    // storage = new Storage()
 
     // Handle click on boxes on the board.
     async handleBoxClick(index) {
@@ -79,6 +76,7 @@ export class Board extends React.Component {
 
 
     // Handle board restart - set component state to initial state
+    // also functions as fresh 'new game'
     handleBoardRestart = async () => {
         if (!this.state.isGame) {
             let gameId = (new Date()).getMilliseconds();
@@ -106,22 +104,21 @@ export class Board extends React.Component {
 
         // Status message
         let status
-
+        /* TODO: create update board function */
         if (winner) {
             // If winner exists, create status message
             status = `The winner is: ${winner}!`
+            /* TODO: update game as finished */
 
-            // Push data about the game to storage
-            // this.storage.update([`${winner} won`])
         } else if (!winner && isFilled) {
             // If game is drawn, create status message
             status = 'Game drawn!'
 
-            // Push data about the game to storage
-            // this.storage.update(['Game drawn'])
+            /* TODO: update game as finished */
+
         } else {
             // If there is no winner and game is not drawn, ask the next player to make a move
-            status = `It is ${(this.state.myTurn ? "your" : "opponent's")} turn.`
+            status = `It is ${(this.state.myTurn ? "your" : "the opponent's")} turn.`
         }
 
         return (
