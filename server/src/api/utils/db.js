@@ -15,11 +15,8 @@ async function insertNewGame(gameId){
         whosTurn: 'X',
         lastUpdate: new Date().getTime()
     }
-    // newGame = JSON.stringify(newGame);
-    // let res = await game.set(gameId,newGame);
     let res = await game.insert(newGame);
-
-    // let res = {status:false};
+    
     console.log(res);
     return res;
 }

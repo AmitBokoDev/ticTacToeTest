@@ -73,7 +73,7 @@ export class Board extends React.Component {
             gameId = btoa(gameId);
             gameId = btoa(gameId);
             console.log(gameId);
-            await utils.newGame(gameId)
+            let insert = await utils.newGame(gameId)
             // if ()
             // window.location.replace(window.location.protocol + "//" + window.location.host + "/game/" + gameId);
         }
